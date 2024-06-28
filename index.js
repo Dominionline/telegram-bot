@@ -1,4 +1,6 @@
 const TelegramBot = require('node-telegram-bot-api');
+const express = require('express');
+const app = express();
 const token = process.env.TELEGRAM_TOKEN;
 const bot = new TelegramBot(token, { polling: true });
 
@@ -34,3 +36,12 @@ bot.onText(/\/info/, (msg) => {
 
 // Aggiungi un listener per errori
 bot.on("polling_error", console.error);
+
+// Server HTTP per rispondere ai ping di UptimeRobot
+app.get("/", (req, res) => {
+    res.send("Il bot è attivo!");
+});
+
+const listener = app.listen(process.env.PORT || 3000, () => {
+    console.log(`Server avviato sulla porta ${listener.address().port}`);
+});
